@@ -2,6 +2,10 @@ syntax = "proto3";
 
 package github.com.mike_jacks.pizza_co.protos.order_management.v1;
 
+import "order_management/v1/order_management.proto";
+
+option go_package = "order_management/v1;order_management_v1";
+
 service OrderManagementService {
-    rpc PlaceOrder(OrderRequest) returns (OrderResponse) {}
+    rpc PlaceOrder(OrderRequest) returns (stream OrderResponse) {}
 }

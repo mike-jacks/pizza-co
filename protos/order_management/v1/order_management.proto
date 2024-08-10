@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package github.com.mike_jacks.pizza_co.protos.order_management.v1;
 
+option go_package = "order_management/v1;order_management_v1";
+
 // OrderResponse represents the response while processing an order.
 message OrderResponse {
     string order_id = 1;
@@ -24,6 +26,49 @@ message Pizza {
     CrustType crust_type = 3;
     repeated Extra extra_options = 4;
     uint32 quantity = 5;
+
+    // Enum for available pizza toppings.
+    enum Topping {
+        TOPPING_UNSPECIFIED = 0;
+        PEPPERONI = 1;
+        MUSHROOMS = 2;
+        ONIONS = 3;
+        SAUSAGE = 4;
+        BACON = 5;
+        BLACK_OLIVES = 6;
+        GREEN_PEPPERS = 7;
+        PINEAPPLE = 8;
+        ANCHOVIES = 9;
+    }
+
+    // Enum for pizza sizes
+    enum Size {
+        SIZE_UNSPECIFIED = 0;
+        SMALL = 1;
+        MEDIUM = 2;
+        LARGE = 3;
+        EXTRA_LARGE = 4;
+    }
+
+    // Enum for types of pizza crusts.
+    enum CrustType {
+        CRUST_TYPE_UNSPECIFIED = 0;
+        THIN = 1;
+        REGULAR = 2;
+        STUFFED = 3;
+        NEW_YORK = 4;
+        DEEP_DISH = 5;
+        GLUTEN_FREE = 6;
+    }
+
+    // Extra options for the pizza
+    enum Extra {
+        EXTRA_UNSPECIFIED = 0;
+        EXTRA_CHEESE = 1;
+        EXTRA_SAUCE = 2;
+        GARLIC_CRUST = 3;
+        BBQ_SAUCE = 4;
+    }
 }
 
 // Payment information for the order.
@@ -61,6 +106,7 @@ message PhoneNumber {
 
 // Enum for payment types.
 enum PaymentType {
+    PAYMENT_TYPE_UNSPECIFIED = 0;
     CASH = 1;
     CREDIT_CARD = 2;
     APPLE_PAY = 3;
@@ -69,14 +115,14 @@ enum PaymentType {
 
 // Enum for payment timeframes
 enum PaymentTimeframe {
-    UNSPECIFIED = 0;
+    PAYMENT_TIMEFRAME_UNSPECIFIED = 0;
     PREPAID = 1;
     PAYLATER = 2;
 }
 
 // Enum for types of phone numbers.
 enum PhoneType {
-    UNSPECIFIED = 0;
+    PHONE_TYPE_UNSPECIFIED = 0;
     MOBILE = 1;
     HOME = 2;
     WORK = 3;
@@ -85,7 +131,7 @@ enum PhoneType {
 
 // Enum for order status.
 enum Status {
-    UNSPECIFIED = 0;
+    STATUS_UNSPECIFIED = 0;
     RECEIVED = 1;
     CHECKING_INVENTORY = 2;
     PROCESSING_PAYMENT = 3;
@@ -94,45 +140,5 @@ enum Status {
     ERROR = 6;
 }
 
-// Enum for available pizza toppings.
-enum Topping {
-    UNSPECIFIED = 0;
-    PEPPERONI = 1;
-    MUSHROOMS = 2;
-    ONIONS = 3;
-    SAUSAGE = 4;
-    BACON = 5;
-    EXTRA_CHEESE = 6;
-    BLACK_OLIVES = 7;
-    GREEN_PEPPERS = 8;
-    PINEAPPLE = 9;
-    ANCHOVIES = 10;
-}
 
-// Enum for pizza sizes
-enum Size {
-    UNSPECIFIED = 0;
-    SMALL = 1;
-    MEDIUM = 2;
-    LARGE = 3;
-    EXTRA_LARGE = 4;
-}
 
-// Enum for types of pizza crusts.
-enum CrustType {
-    UNSPECIFIED = 0;
-    THIN = 1;
-    REGULAR = 2;
-    STUFFED = 3;
-    NEW_YORK = 4;
-    DEEP_DISH = 5;
-    GLUTEN_FREE = 6;
-}
-
-enum Extra {
-    UNSPECIFIED = 0;
-    EXTRA_CHEESE = 1;
-    EXTRA_SAUCE = 2;
-    GARLIC_CRUST = 3;
-    BBQ_SAUCE = 4;
-}
