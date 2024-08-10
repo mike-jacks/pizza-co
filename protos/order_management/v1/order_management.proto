@@ -1,0 +1,138 @@
+syntax = "proto3";
+
+package github.com.mike_jacks.pizza_co.protos.order_management.v1;
+
+// OrderResponse represents the response while processing an order.
+message OrderResponse {
+    string order_id = 1;
+    Status status = 2;
+    string message = 3;
+
+}
+
+// OrderRequest contains all the necessary information to place an order
+message OrderRequest {
+    Customer customer_info = 1;
+    repeated Pizza pizzas = 2;
+    Payment payment_method = 3;
+}
+
+// Pizza contains order details of a pizza being ordered
+message Pizza {
+    repeated Topping toppings = 1;
+    Size size = 2;
+    CrustType crust_type = 3;
+    repeated Extra extra_options = 4;
+    uint32 quantity = 5;
+}
+
+// Payment information for the order.
+message Payment {
+    PaymentType payment_type = 1;
+    PaymentTimeframe payment_timeframe = 2;
+    string total_order_amount = 3;
+}
+
+// Customer details.
+message Customer {
+    string id = 1;
+    string first_name = 2;
+    string last_name = 3;
+    string email_address = 4;
+    Address delivery_address = 5;
+    PhoneNumber phone_number = 6;
+}
+
+// Address details for delivery.
+message Address {
+    string house_number = 1;
+    string street_name = 2;
+    string apt_number = 3;
+    string city = 4;
+    string state = 5;
+    string zip_code = 6;
+}
+
+// Phone number details.
+message PhoneNumber {
+    string number = 1;
+    PhoneType type = 2;
+}
+
+// Enum for payment types.
+enum PaymentType {
+    CASH = 1;
+    CREDIT_CARD = 2;
+    APPLE_PAY = 3;
+    GOOGLE_PAY = 4;
+}
+
+// Enum for payment timeframes
+enum PaymentTimeframe {
+    UNSPECIFIED = 0;
+    PREPAID = 1;
+    PAYLATER = 2;
+}
+
+// Enum for types of phone numbers.
+enum PhoneType {
+    UNSPECIFIED = 0;
+    MOBILE = 1;
+    HOME = 2;
+    WORK = 3;
+
+}
+
+// Enum for order status.
+enum Status {
+    UNSPECIFIED = 0;
+    RECEIVED = 1;
+    CHECKING_INVENTORY = 2;
+    PROCESSING_PAYMENT = 3;
+    PROCESSING_ORDER = 4;
+    COMPLETE = 5;
+    ERROR = 6;
+}
+
+// Enum for available pizza toppings.
+enum Topping {
+    UNSPECIFIED = 0;
+    PEPPERONI = 1;
+    MUSHROOMS = 2;
+    ONIONS = 3;
+    SAUSAGE = 4;
+    BACON = 5;
+    EXTRA_CHEESE = 6;
+    BLACK_OLIVES = 7;
+    GREEN_PEPPERS = 8;
+    PINEAPPLE = 9;
+    ANCHOVIES = 10;
+}
+
+// Enum for pizza sizes
+enum Size {
+    UNSPECIFIED = 0;
+    SMALL = 1;
+    MEDIUM = 2;
+    LARGE = 3;
+    EXTRA_LARGE = 4;
+}
+
+// Enum for types of pizza crusts.
+enum CrustType {
+    UNSPECIFIED = 0;
+    THIN = 1;
+    REGULAR = 2;
+    STUFFED = 3;
+    NEW_YORK = 4;
+    DEEP_DISH = 5;
+    GLUTEN_FREE = 6;
+}
+
+enum Extra {
+    UNSPECIFIED = 0;
+    EXTRA_CHEESE = 1;
+    EXTRA_SAUCE = 2;
+    GARLIC_CRUST = 3;
+    BBQ_SAUCE = 4;
+}

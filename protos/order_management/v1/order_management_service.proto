@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+package github.com.mike_jacks.pizza_co.protos.order_management.v1;
+
+service OrderManagementService {
+    rpc PlaceOrder(OrderRequest) returns (OrderResponse) {}
+}
