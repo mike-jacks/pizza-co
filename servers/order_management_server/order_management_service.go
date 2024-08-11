@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"math/rand"
+	"os"
 	"time"
 
 	inventory_v1_pb "github.com/mike_jacks/pizza_co/generated/inventory/v1"
@@ -32,8 +33,33 @@ func generateOrderNumber() string {
 	return orderNumber
 }
 
+func checkInventory(s *orderManagementServer, req *inventory_v1_pb.InventoryCheckRequest) (*inventory_v1_pb.InventoryCheckResponse, error) {
+	const maxRetries = 3
+	const retryDelay = 2 * time.Second
+	var resp *inventory_v1_pb.InventoryCheckResponse
+	var err error
+
+	for i := 0; i < maxRetries; i++ {
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+
+		resp, err = s.inventoryClient.CheckInventory(ctx, req)
+		if err != nil {
+			log.Printf("Error checking inventory: %v", err)
+			os.Stdout.Sync()
+			time.Sleep(retryDelay)
+		} else {
+			break
+		}
+	}
+	if err != nil {
+		log.Printf("Failed to check inventory after %d attempts: %v", maxRetries, err)
+		os.Stdout.Sync()
+	}
+	return resp, err
+}
+
 func (s *orderManagementServer) PlaceOrder(req *order_management_v1_pb.OrderRequest, stream order_management_v1_pb.OrderManagementService_PlaceOrderServer) error {
-	log.Printf("Received order for customer: %v %v", req.GetCustomerInfo().GetFirstName(), req.GetCustomerInfo().GetLastName())
 
 	stages := []order_management_v1_pb.Status{
 		order_management_v1_pb.Status_RECEIVED,
@@ -50,23 +76,50 @@ func (s *orderManagementServer) PlaceOrder(req *order_management_v1_pb.OrderRequ
 
 		switch stage.String() {
 		case "RECEIVED":
+			log.Printf("Received order for customer: %v %v", req.GetCustomerInfo().GetFirstName(), req.GetCustomerInfo().GetLastName())
+			os.Stdout.Sync()
+			time.Sleep(2 * time.Second)
 			message = "Your order has been received"
 		case "CHECKING_INVENTORY":
+			log.Printf("Checking inventory")
+			os.Stdout.Sync()
+			time.Sleep(2 * time.Second)
+			res := &order_management_v1_pb.OrderResponse{
+				OrderId: orderID,
+				Status:  stage,
+				Message: "Currently Checking Inventory....standby...",
+			}
+			if err := stream.Send(res); err != nil {
+				log.Println(err)
+				os.Stdout.Sync()
+				return err
+			}
 			pizzas := req.GetPizzas()
 			req := &inventory_v1_pb.InventoryCheckRequest{
 				Pizzas: pizzas,
 			}
-			resp, err := s.inventoryClient.CheckInventory(context.Background(), req)
+
+			resp, err := checkInventory(s, req)
 			if err != nil {
-				log.Fatalf("Error checking inventory: %v", err)
+				log.Printf("Error checking inventory: %v", err)
+				os.Stdout.Sync()
+				return err
 			}
+			time.Sleep(2 * time.Second)
 			message = fmt.Sprintf("%v", resp.GetMessage())
 
 		case "PROCESSING_PAYMENT":
-			message = "Items in stock! Processing payment for your order"
+			log.Printf("Begin Processing Payment")
+			os.Stdout.Sync()
+			time.Sleep(2 * time.Second)
+			message = "Your payment successfully went through. Thank you!"
 		case "PROCESSING_ORDER":
-			message = "Payment complete! Processing your order"
+			log.Print("Begin processiong order.")
+			os.Stdout.Sync()
+			message = "Order Processing complete!"
 		case "COMPLETE":
+			log.Print("Order Process complete, sending final message")
+			os.Stdout.Sync()
 			switch req.GetPaymentMethod().GetPaymentTimeframe().String() {
 			case "PREPAID":
 				message = "Order is ready for pickup or delivery."
@@ -87,10 +140,12 @@ func (s *orderManagementServer) PlaceOrder(req *order_management_v1_pb.OrderRequ
 
 		if err := stream.Send(res); err != nil {
 			log.Println(err)
+			os.Stdout.Sync()
+			return err
 		}
 
 		// Simulate delay in processing each stage
-		time.Sleep(4 * time.Second)
+		time.Sleep(2 * time.Second)
 	}
 	return nil
 }

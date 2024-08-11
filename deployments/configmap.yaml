@@ -3,4 +3,6 @@ kind: ConfigMap
 metadata:
   name: pizza-co-config
 data:
-  INVENTORY_SERVICE_HOST: inventory-service
+  INVENTORY_SERVICE_HOST: "inventory-service"
+  ORDER_MANAGEMENT_SERVICE_HOSE: "order-management-service"
+  USE_ENV_FILE: "false"

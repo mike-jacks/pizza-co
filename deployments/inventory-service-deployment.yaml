@@ -5,7 +5,7 @@ metadata:
   labels:
     app: inventory-service
 spec:
-  replicas: 1
+  replicas: 5
   selector:
     matchLabels:
       app: inventory-service
@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: inventory-service
-          image: mikejacks/pizza-co-servers-inventory-service:v1.0.1
+          image: mikejacks/pizza-co-servers-inventory-service:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 9100
@@ -39,4 +39,5 @@ spec:
     - protocol: TCP
       port: 9100
       targetPort: 9100
+  sessionAffinity: None
   type: ClusterIP

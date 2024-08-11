@@ -5,7 +5,7 @@ metadata:
   labels:
     app: order-management-service
 spec:
-  replicas: 1
+  replicas: 5
   selector:
     matchLabels:
       app: order-management-service
@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: order-management-service
-          image: mikejacks/pizza-co-servers-order-management-service:v1.0.1
+          image: mikejacks/pizza-co-servers-order-management-service:latest
           imagePullPolicy: Always
           env:
             - name: INVENTORY_SERVICE_HOST
@@ -24,7 +24,11 @@ spec:
                 configMapKeyRef:
                   name: pizza-co-config
                   key: INVENTORY_SERVICE_HOST
-
+            - name: USE_ENV_FILE
+              valueFrom:
+                configMapKeyRef:
+                  name: pizza-co-config
+                  key: USE_ENV_FILE
           ports:
             - containerPort: 9000
             - containerPort: 9100
@@ -47,4 +51,5 @@ spec:
     - protocol: TCP
       port: 9000
       targetPort: 9000
+  sessionAffinity: None
   type: NodePort

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"os"
 	"time"
 
 	inventory_v1_pb "github.com/mike_jacks/pizza_co/generated/inventory/v1"
@@ -16,6 +17,7 @@ type inventoryServer struct {
 
 func (s *inventoryServer) CheckInventory(ctx context.Context, req *inventory_v1_pb.InventoryCheckRequest) (*inventory_v1_pb.InventoryCheckResponse, error) {
 	log.Println("Checking Inventory...")
+	os.Stdout.Sync()
 	time.Sleep(3 * time.Second)
 	var pizzas []*order_management_v1_pb.Pizza = req.GetPizzas()
 	var toppings []order_management_v1_pb.Pizza_Topping
@@ -43,12 +45,16 @@ func (s *inventoryServer) CheckInventory(ctx context.Context, req *inventory_v1_
 	}
 
 	log.Printf("Order requesting toppings: %v", toppings)
+	os.Stdout.Sync()
 	time.Sleep(1 * time.Second)
 	log.Printf("Order requesting crust types: %v", crust_types)
+	os.Stdout.Sync()
 	time.Sleep(1 * time.Second)
 	log.Printf("Order requesting crust sizes: %v", crust_sizes)
+	os.Stdout.Sync()
 	time.Sleep(1 * time.Second)
 	log.Println("Inventory Check Complete!")
+	os.Stdout.Sync()
 	time.Sleep(1 * time.Second)
 
 	message := "Your order includes the following toppings:\n"
@@ -75,9 +81,15 @@ func (s *inventoryServer) CheckInventory(ctx context.Context, req *inventory_v1_
 }
 
 func (s *inventoryServer) UpdateInventory(ctx context.Context, req *inventory_v1_pb.UpdateInventoryRequest) (*inventory_v1_pb.UpdateInventoryResponse, error) {
-	log.Println("Updating...")
+	go func() {
+		log.Println("Updating...")
+		os.Stdout.Sync()
+	}()
 	time.Sleep(4 * time.Second)
-	log.Println("Inventory updated successfully!")
+	go func() {
+		log.Println("Inventory updated successfully!")
+		os.Stdout.Sync()
+	}()
 	return &inventory_v1_pb.UpdateInventoryResponse{
 		Message:   "Inventory has been updated successfully",
 		ErrorCode: 0,
