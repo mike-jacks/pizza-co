@@ -1,6 +1,6 @@
-module github.com/mike-jacks/pizza-co
+module github.com/mike_jacks/pizza_co
 
-go 1.22.6
+go 1.22
 
 require (
 	google.golang.org/grpc v1.65.0

@@ -4,7 +4,7 @@
 // - protoc             v5.27.3
 // source: order_management/v1/order_management_service.proto
 
-package order_management_v1
+package order_management_v1_pb
 
 import (
 	context "context"

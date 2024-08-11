@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-management-service
+  labels:
+    app: order-management-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: order-management-service
+  template:
+    metadata:
+      labels:
+        app: order-management-service
+    spec:
+      containers:
+        - name: order-management-service
+          image: mikejacks/pizza-co-servers-order-management-service:v1.0.1
+          imagePullPolicy: Always
+          env:
+            - name: INVENTORY_SERVICE_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: pizza-co-config
+                  key: INVENTORY_SERVICE_HOST
+
+          ports:
+            - containerPort: 9000
+            - containerPort: 9100
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "500m"
+            limits:
+              memory: "256Mi"
+              cpu: "1000m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: order-management-service
+spec:
+  selector:
+    app: order-management-service
+  ports:
+    - protocol: TCP
+      port: 9000
+      targetPort: 9000
+  type: NodePort

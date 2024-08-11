@@ -1,0 +1,5 @@
+syntax = "proto3";
+
+package github.com.mike_jacks.pizza_co.protos.payment.v1;
+
+option go_package = "github.com/mike_jacks/pizza_co/generated/payment/v1;payment_v1_pb";

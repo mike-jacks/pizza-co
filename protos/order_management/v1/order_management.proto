@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package github.com.mike_jacks.pizza_co.protos.order_management.v1;
 
-option go_package = "order_management/v1;order_management_v1";
+option go_package = "github.com/mike_jacks/pizza_co/generated/order_management/v1;order_management_v1_pb";
 
 // OrderResponse represents the response while processing an order.
 message OrderResponse {
