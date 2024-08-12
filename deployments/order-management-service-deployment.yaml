@@ -5,7 +5,7 @@ metadata:
   labels:
     app: order-management-service
 spec:
-  replicas: 5
+  replicas: 2
   selector:
     matchLabels:
       app: order-management-service
@@ -52,4 +52,4 @@ spec:
       port: 9000
       targetPort: 9000
   sessionAffinity: None
-  type: NodePort
+  type: ClusterIP

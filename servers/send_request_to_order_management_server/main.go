@@ -16,7 +16,7 @@ import (
 
 var mu sync.Mutex
 
-func orderRequest() *order_management_v1_pb.OrderRequest {
+func orderRequest(index uint32) *order_management_v1_pb.OrderRequest {
 	mu.Lock()
 	uuid := faker.UUIDDigit()
 	firstName := faker.FirstName()
@@ -48,13 +48,13 @@ func orderRequest() *order_management_v1_pb.OrderRequest {
 				Size:         order_management_v1_pb.Pizza_EXTRA_LARGE,
 				CrustType:    order_management_v1_pb.Pizza_NEW_YORK,
 				ExtraOptions: []order_management_v1_pb.Pizza_Extra{},
-				Quantity:     2,
+				Quantity:     index,
 			},
 		},
 		PaymentMethod: &order_management_v1_pb.Payment{
 			PaymentType:      order_management_v1_pb.PaymentType_CREDIT_CARD,
 			PaymentTimeframe: order_management_v1_pb.PaymentTimeframe_PREPAID,
-			TotalOrderAmount: "23.32",
+			TotalOrderAmount: string(13 * index),
 		},
 	}
 	return req
@@ -66,7 +66,7 @@ func main() {
 	}
 
 	// Number of concurrent requests
-	numRequests := 1000
+	numRequests := 500
 
 	// WaitGroup to wait for all goroutines to finish
 	var wg sync.WaitGroup
@@ -74,7 +74,7 @@ func main() {
 
 	for i := 1; i <= numRequests; i++ {
 		orderManagementServerHost := os.Getenv("ORDER_MANAGEMENT_SERVICE_HOST")
-		orderManagementClient, err := order_management.CreateOrderManagementClient(orderManagementServerHost, 49850)
+		orderManagementClient, err := order_management.CreateOrderManagementClient(orderManagementServerHost, 9000)
 		if err != nil {
 			log.Fatalf("Failed to create order manaagement client ; %v", err)
 			os.Stdout.Sync()
@@ -89,7 +89,7 @@ func main() {
 					log.Printf("Request %d panicked: %v", i, r)
 				}
 			}()
-			req := orderRequest()
+			req := orderRequest(uint32(i))
 
 			// Make the gRPC request
 			stream, err := orderManagementClient.PlaceOrder(context.Background(), req)
