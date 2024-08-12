@@ -40,7 +40,7 @@ func checkInventory(s *orderManagementServer, req *inventory_v1_pb.InventoryChec
 	var err error
 
 	for i := 0; i < maxRetries; i++ {
-		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 		defer cancel()
 
 		resp, err = s.inventoryClient.CheckInventory(ctx, req)

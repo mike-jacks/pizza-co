@@ -31,7 +31,6 @@ spec:
                   key: USE_ENV_FILE
           ports:
             - containerPort: 9000
-            - containerPort: 9100
           resources:
             requests:
               memory: "128Mi"
@@ -52,4 +51,4 @@ spec:
       port: 9000
       targetPort: 9000
   sessionAffinity: None
-  type: ClusterIP
+  type: LoadBalancer

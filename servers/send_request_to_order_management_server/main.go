@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"log"
 	"os"
@@ -11,6 +12,7 @@ import (
 	"github.com/bxcodec/faker/v4"
 	"github.com/joho/godotenv"
 	"github.com/mike_jacks/pizza_co/clients/order_management"
+
 	order_management_v1_pb "github.com/mike_jacks/pizza_co/generated/order_management/v1"
 )
 
@@ -54,7 +56,7 @@ func orderRequest(index uint32) *order_management_v1_pb.OrderRequest {
 		PaymentMethod: &order_management_v1_pb.Payment{
 			PaymentType:      order_management_v1_pb.PaymentType_CREDIT_CARD,
 			PaymentTimeframe: order_management_v1_pb.PaymentTimeframe_PREPAID,
-			TotalOrderAmount: string(13 * index),
+			TotalOrderAmount: fmt.Sprint(13 * index),
 		},
 	}
 	return req
@@ -66,7 +68,7 @@ func main() {
 	}
 
 	// Number of concurrent requests
-	numRequests := 500
+	numRequests := 10
 
 	// WaitGroup to wait for all goroutines to finish
 	var wg sync.WaitGroup
@@ -74,12 +76,19 @@ func main() {
 
 	for i := 1; i <= numRequests; i++ {
 		orderManagementServerHost := os.Getenv("ORDER_MANAGEMENT_SERVICE_HOST")
-		orderManagementClient, err := order_management.CreateOrderManagementClient(orderManagementServerHost, 9000)
+		var port int
+		if i%2 == 0 {
+			port = 52704
+		} else {
+			port = 9000
+		}
+
+		orderManagementClient, err := order_management.CreateOrderManagementClient(orderManagementServerHost, port)
 		if err != nil {
 			log.Fatalf("Failed to create order manaagement client ; %v", err)
 			os.Stdout.Sync()
 		}
-		log.Printf("Making request %d to %s", i, orderManagementServerHost)
+		log.Printf("Making request %d to %s:%d", i, orderManagementServerHost, port)
 
 		time.Sleep(10 * time.Millisecond)
 		go func(i int) {
@@ -92,7 +101,8 @@ func main() {
 			req := orderRequest(uint32(i))
 
 			// Make the gRPC request
-			stream, err := orderManagementClient.PlaceOrder(context.Background(), req)
+			ctx := context.Background()
+			stream, err := orderManagementClient.PlaceOrder(ctx, req)
 			if err != nil {
 				log.Printf("Request %d failed: %v", i, err)
 				return
