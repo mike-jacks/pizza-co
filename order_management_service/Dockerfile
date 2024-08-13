@@ -21,10 +21,10 @@ COPY ./clients ./clients
 COPY ./config ./config
 
 # Build the server application
-RUN go build -o order_management_service ./order_management_service/.
+RUN go build -o order_management_service_exec ./order_management_service/.
 
 # Expose the server port
 EXPOSE 9000
 
 # Command to run the server
-CMD ["./order_management_service"]
+CMD ["./order_management_service_exec"]
