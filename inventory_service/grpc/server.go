@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/mike_jacks/pizza_co/config"
+	"github.com/mike_jacks/pizza_co/inventory_service/adapters"
 	inventory_v1_pb "github.com/mike_jacks/pizza_co/inventory_service/ports/grpc/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -18,7 +19,7 @@ type Server struct {
 
 func NewServer() *Server {
 	grpcServer := grpc.NewServer()
-	inventory_v1_pb.RegisterInventoryServiceServer(grpcServer, &inventoryServer{})
+	inventory_v1_pb.RegisterInventoryServiceServer(grpcServer, &adapters.InventoryServer{})
 	reflection.Register(grpcServer)
 	return &Server{
 		grpcServer: grpcServer,

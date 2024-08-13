@@ -47,7 +47,7 @@ func orderRequest(index uint32) *order_management_service_v1_pb.OrderRequest {
 		},
 		Pizzas: []*common_v1_pb.Pizza{
 			{
-				Toppings:     []common_v1_pb.Topping{common_v1_pb.Topping_PEPPERONI, common_v1_pb.Topping_BLACK_OLIVES},
+				Toppings:     []common_v1_pb.Topping{common_v1_pb.Topping_PEPPERONI, common_v1_pb.Topping_BLACK_OLIVES, common_v1_pb.Topping_ANCHOVIES},
 				Size:         common_v1_pb.Size_EXTRA_LARGE,
 				CrustType:    common_v1_pb.CrustType_NEW_YORK,
 				ExtraOptions: []common_v1_pb.Extra{},
