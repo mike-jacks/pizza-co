@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+package common.proto.v1;
+
+option go_package ="github.com/mike_jacks/pizza_co/common/ports/grpc/v1;common_v1_pb";
+
+// Pizza contains order details of a pizza being ordered
+message Pizza {
+    repeated Topping toppings = 1;
+    Size size = 2;
+    CrustType crust_type = 3;
+    repeated Extra extra_options = 4;
+    uint32 quantity = 5;
+}
+
+// Enum for available pizza toppings.
+enum Topping {
+    TOPPING_UNSPECIFIED = 0;
+    PEPPERONI = 1;
+    MUSHROOMS = 2;
+    ONIONS = 3;
+    SAUSAGE = 4;
+    BACON = 5;
+    BLACK_OLIVES = 6;
+    GREEN_PEPPERS = 7;
+    PINEAPPLE = 8;
+    ANCHOVIES = 9;
+}
+
+// Enum for pizza sizes
+enum Size {
+    SIZE_UNSPECIFIED = 0;
+    SMALL = 1;
+    MEDIUM = 2;
+    LARGE = 3;
+    EXTRA_LARGE = 4;
+}
+
+// Enum for types of pizza crusts.
+enum CrustType {
+    CRUST_TYPE_UNSPECIFIED = 0;
+    THIN = 1;
+    REGULAR = 2;
+    STUFFED = 3;
+    NEW_YORK = 4;
+    DEEP_DISH = 5;
+    GLUTEN_FREE = 6;
+}
+
+// Extra options for the pizza
+enum Extra {
+    EXTRA_UNSPECIFIED = 0;
+    EXTRA_CHEESE = 1;
+    EXTRA_SAUCE = 2;
+    GARLIC_CRUST = 3;
+    BBQ_SAUCE = 4;
+}
+
+message PizzaCrust {
+    CrustType crust_type = 1;
+    Size crust_size = 2;
+}
+

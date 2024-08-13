@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package common.proto.v1;
+
+option go_package ="github.com/mike_jacks/pizza_co/common/ports/grpc/v1;common_v1_pb";
+
+// Customer details.
+message Customer {
+    string id = 1;
+    string first_name = 2;
+    string last_name = 3;
+    string email_address = 4;
+    Address delivery_address = 5;
+    PhoneNumber phone_number = 6;
+}
+
+// Phone number details.
+message PhoneNumber {
+    string number = 1;
+    PhoneType type = 2;
+}
+
+// Address details for delivery.
+message Address {
+    string house_number = 1;
+    string street_name = 2;
+    string apt_number = 3;
+    string city = 4;
+    string state = 5;
+    string zip_code = 6;
+}
+
+// Enum for types of phone numbers.
+enum PhoneType {
+    PHONE_TYPE_UNSPECIFIED = 0;
+    MOBILE = 1;
+    HOME = 2;
+    WORK = 3;
+
+}

@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package order_management_service.proto.v1;
+
+import "common/proto/v1/customer.proto";
+import "common/proto/v1/payment.proto";
+import "common/proto/v1/pizza.proto";
+
+option go_package = "github.com/mike_jacks/pizza_co/order_management_service/ports/grpc/v1;order_management_v1_pb";
+
+// OrderResponse represents the response while processing an order.
+message OrderResponse {
+    string order_id = 1;
+    Status status = 2;
+    string message = 3;
+}
+
+// OrderRequest contains all the necessary information to place an order
+message OrderRequest {
+    common.proto.v1.Customer customer_info = 1;
+    repeated common.proto.v1.Pizza pizzas = 2;
+    common.proto.v1.Payment payment_method = 3;
+}
+
+// Enum for order status.
+enum Status {
+    STATUS_UNSPECIFIED = 0;
+    RECEIVED = 1;
+    CHECKING_INVENTORY = 2;
+    PROCESSING_PAYMENT = 3;
+    PROCESSING_ORDER = 4;
+    COMPLETE = 5;
+    ERROR = 6;
+}
+
+
+

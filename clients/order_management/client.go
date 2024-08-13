@@ -3,7 +3,7 @@ package order_management
 import (
 	"fmt"
 
-	order_management_v1_pb "github.com/mike_jacks/pizza_co/generated/order_management/v1"
+	order_management_v1_pb "github.com/mike_jacks/pizza_co/order_management_service/ports/grpc/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )

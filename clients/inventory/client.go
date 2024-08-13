@@ -3,7 +3,7 @@ package inventory
 import (
 	"fmt"
 
-	inventory_v1_pb "github.com/mike_jacks/pizza_co/generated/inventory/v1"
+	inventory_v1_pb "github.com/mike_jacks/pizza_co/inventory_service/ports/grpc/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
