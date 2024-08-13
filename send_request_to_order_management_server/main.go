@@ -64,7 +64,7 @@ func orderRequest(index uint32) *order_management_service_v1_pb.OrderRequest {
 }
 
 func main() {
-	if err := godotenv.Load("../../.env"); err != nil {
+	if err := godotenv.Load("../.env"); err != nil {
 		log.Fatalf("Error loading .env file")
 	}
 
