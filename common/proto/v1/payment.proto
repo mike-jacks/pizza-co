@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package common.proto.v1;
+
+option go_package ="github.com/mike_jacks/pizza_co/common/ports/grpc/v1;common_v1_pb";
+
+// Payment information for the order.
+message Payment {
+    PaymentType payment_type = 1;
+    PaymentTimeframe payment_timeframe = 2;
+    string total_order_amount = 3;
+}
+
+// Enum for payment types.
+enum PaymentType {
+    PAYMENT_TYPE_UNSPECIFIED = 0;
+    CASH = 1;
+    CREDIT_CARD = 2;
+    APPLE_PAY = 3;
+    GOOGLE_PAY = 4;
+}
+
+// Enum for payment timeframes
+enum PaymentTimeframe {
+    PAYMENT_TIMEFRAME_UNSPECIFIED = 0;
+    PREPAID = 1;
+    PAYLATER = 2;
+}

@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package inventory_service.proto.v1;
+
+import "common/proto/v1/pizza.proto";
+
+option go_package = "github.com/mike_jacks/pizza_co/inventory_service/ports/grpc/v1;inventory_v1_pb";
+
+message InventoryCheckRequest {
+    repeated common.proto.v1.Pizza pizzas = 1;
+}
+
+message InventoryCheckResponse {
+    string message = 1;
+    uint32 error_code = 2;
+    bool is_available = 3;
+}
+
+message UpdateInventoryRequest {
+    UpdateType update_type = 1;
+    repeated common.proto.v1.Topping toppings = 2;
+    repeated common.proto.v1.PizzaCrust pizza_crust = 3;
+
+    enum UpdateType {
+        UPDATE_TYPE_UNKNOWN = 0;
+        ADD = 1;
+        DELETE = 2;
+    }
+}
+
+message UpdateInventoryResponse {
+    string message = 1;
+    uint32 error_code = 2;
+}

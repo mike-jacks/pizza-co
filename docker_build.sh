@@ -1,4 +1,5 @@
 #!/bin/bash
+set -ex
 
 # Set default tag
 TAG=${TAG:-latest}
@@ -15,12 +16,12 @@ echo "About to build and output service files with version number: $TAG"
 sleep 5
 
 # Build the image
-if ! docker build -t mikejacks/pizza-co-servers-inventory-service:$TAG -f ./servers/inventory_server/Dockerfile . --no-cache ; then
+if ! docker build -t mikejacks/pizza-co-servers-inventory-service:$TAG -f ./inventory_service/Dockerfile . --no-cache ; then
     echo "inventory-service build failed!"
     exit 1
 fi
 
-if ! docker build -t mikejacks/pizza-co-servers-order-management-service:$TAG -f ./servers/order_management_server/Dockerfile . --no-cache ; then
+if ! docker build -t mikejacks/pizza-co-servers-order-management-service:$TAG -f ./order_management_service/Dockerfile . --no-cache ; then
     echo "order-management-service build failed!"
     exit 1
 fi

@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package inventory_service.proto.v1;
+
+import "inventory_service/proto/v1/inventory.proto";
+
+option go_package = "github.com/mike_jacks/pizza_co/inventory_service/ports/grpc/v1;inventory_v1_pb";
+
+service InventoryService {
+    rpc CheckInventory(InventoryCheckRequest) returns (InventoryCheckResponse) {}
+    rpc UpdateInventory(UpdateInventoryRequest) returns (UpdateInventoryResponse) {}
+}
