@@ -47,7 +47,7 @@ func orderRequest(index uint32) *order_management_service_v1_pb.OrderRequest {
 		},
 		Pizzas: []*common_v1_pb.Pizza{
 			{
-				Toppings:     []common_v1_pb.Topping{common_v1_pb.Topping_PEPPERONI, common_v1_pb.Topping_BLACK_OLIVES},
+				Toppings:     []common_v1_pb.Topping{common_v1_pb.Topping_PEPPERONI, common_v1_pb.Topping_BLACK_OLIVES, common_v1_pb.Topping_ANCHOVIES},
 				Size:         common_v1_pb.Size_EXTRA_LARGE,
 				CrustType:    common_v1_pb.CrustType_NEW_YORK,
 				ExtraOptions: []common_v1_pb.Extra{},
@@ -69,7 +69,7 @@ func main() {
 	}
 
 	// Number of concurrent requests
-	numRequests := 1000
+	numRequests := 2
 
 	// WaitGroup to wait for all goroutines to finish
 	var wg sync.WaitGroup
@@ -79,9 +79,9 @@ func main() {
 		orderManagementServerHost := os.Getenv("ORDER_MANAGEMENT_SERVICE_HOST")
 		var port int
 		if i%2 == 0 {
-			port = 65365
+			port = 49879
 		} else {
-			port = 9000
+			port = 49879
 		}
 
 		orderManagementClient, err := order_management.CreateOrderManagementClient(orderManagementServerHost, port)
