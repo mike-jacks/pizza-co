@@ -69,7 +69,7 @@ func main() {
 	}
 
 	// Number of concurrent requests
-	numRequests := 1000
+	numRequests := 10
 
 	// WaitGroup to wait for all goroutines to finish
 	var wg sync.WaitGroup
@@ -79,9 +79,9 @@ func main() {
 		orderManagementServerHost := os.Getenv("ORDER_MANAGEMENT_SERVICE_HOST")
 		var port int
 		if i%2 == 0 {
-			port = 65365
+			port = 49879
 		} else {
-			port = 9000
+			port = 49879
 		}
 
 		orderManagementClient, err := order_management.CreateOrderManagementClient(orderManagementServerHost, port)
