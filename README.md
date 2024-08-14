@@ -12,11 +12,13 @@ The program is ran by either running my 'send_request_to_order_management_server
 
 The starting endpoint/grpc request is the 'order_management_service' end point.
 
-AI also have kubernetes deployment scripts along with Dockerfiles and publicly hosted images on [hub.docker.com](https://hub.docker.com/u/mikejacks). See docker images here:
+I also have kubernetes deployment scripts along with Dockerfiles and publicly hosted images on [hub.docker.com](https://hub.docker.com/u/mikejacks). See docker images here:
 
 `docker pull mikejacks/pizza-co-servers-inventory-service`
 
 `docker pull mikejacks/pizza-co-servers-order-management-service`
+
+I was able to deploy my kubernetes scripts locally through my mac terminal through 'minikube'
 
 ## Installation and running application
 
@@ -74,3 +76,71 @@ Here is a sample of a request someone could make to the PlaceOrder gRPC protobuf
   }
 }
 ```
+
+Here is the sample stream responses you would get:
+
+```json
+// Response 1:
+{
+  "orderId": "ORDER24804568",
+  "status": "RECEIVED",
+  "message": "Your order has been received"
+}
+
+// Response 2:
+{
+  "orderId": "ORDER24804568",
+  "status": "CHECKING_INVENTORY",
+  "message": "Currently Checking Inventory....standby..."
+}
+
+// Response 3:
+{
+  "orderId": "ORDER24804568",
+  "status": "CHECKING_INVENTORY",
+  "message": "Your order includes the following toppings:\n2x PEPPERONI, 2x ONIONS,.\n\nYour order includes the following crust types:\n2x NEW_YORK.\n\nYour order includes the following crust sizes:\n2x EXTRA_LARGE. All items in your order are in inventory and available to order!\n"
+}
+
+// Response 4:
+{
+  "orderId": "ORDER24804568",
+  "status": "PROCESSING_PAYMENT",
+  "message": "Your payment successfully went through. Thank you!"
+}
+
+// Response 5:
+{
+  "orderId": "ORDER24804568",
+  "status": "PROCESSING_ORDER",
+  "message": "Order Processing complete!"
+}
+
+// Response 6:
+{
+  "orderId": "ORDER24804568",
+  "status": "COMPLETE",
+  "message": "Order is ready for pickup or delivery."
+}
+```
+
+Example logs from the 'order-management-service' server:
+
+```bash
+[order-management-service-c847cdf89-kwv9c] 2024/08/14 07:13:09 Received order for customer: Alan Smithy
+[order-management-service-c847cdf89-kwv9c] 2024/08/14 07:13:13 Checking inventory
+[order-management-service-c847cdf89-kwv9c] 2024/08/14 07:13:26 Begin Processing Payment
+[order-management-service-c847cdf89-kwv9c] 2024/08/14 07:13:30 Begin processiong order.
+[order-management-service-c847cdf89-kwv9c] 2024/08/14 07:13:32 Order Process complete, sending final message
+```
+
+Example logs from the 'inventory-service' server:
+
+```bash
+[inventory-service-594ddbf8fc-jx9pm] 2024/08/14 07:11:31 Checking Inventory...
+[inventory-service-594ddbf8fc-jx9pm] 2024/08/14 07:11:34 Order requesting toppings: [PEPPERONI ONIONS]
+[inventory-service-594ddbf8fc-jx9pm] 2024/08/14 07:11:35 Order requesting crust types: [NEW_YORK]
+[inventory-service-594ddbf8fc-jx9pm] 2024/08/14 07:11:36 Order requesting crust sizes: [EXTRA_LARGE]
+[inventory-service-594ddbf8fc-jx9pm] 2024/08/14 07:11:37 Inventory Check Complete!
+```
+
+Overall this was a very fun and challenging project. I look forward into working and learning more about Go, Gorm, gRPC, Hex Design principles, and kubernetes deployments.
