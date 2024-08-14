@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 
 	"github.com/mike_jacks/pizza_co/inventory_service/domain/entities"
 	"github.com/mike_jacks/pizza_co/inventory_service/domain/types"
@@ -41,6 +42,21 @@ func InitDB() *gorm.DB {
 	if err != nil {
 		log.Fatalf("failed to drop tables: %v", err)
 	}
+
+	// Retrieve the underlying *sql.DB object to configure connection pool settings
+	sqlDB, err := db.DB()
+	if err != nil {
+		log.Fatalf("failed to get sql.DB from gorm.DB: %v", err)
+	}
+
+	// Set the maximum number of open connections to the database
+	sqlDB.SetMaxOpenConns(25)
+
+	// Set the maximum number of idle connections in the pool
+	sqlDB.SetMaxIdleConns(25)
+
+	// Set the maximum lifetime of a connection
+	sqlDB.SetConnMaxLifetime(time.Minute * 5)
 
 	// Auto-migrate the schema
 	err = db.AutoMigrate(&entities.InventoryItem{}, &entities.Topping{}, &entities.InventoryItemTopping{})

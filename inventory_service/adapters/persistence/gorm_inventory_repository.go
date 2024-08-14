@@ -5,6 +5,7 @@ package persistence
 import (
 	"fmt"
 	"strings"
+	"sync"
 
 	"github.com/mike_jacks/pizza_co/inventory_service/ports/repository"
 
@@ -12,6 +13,8 @@ import (
 	"github.com/mike_jacks/pizza_co/inventory_service/domain/types"
 	"gorm.io/gorm"
 )
+
+var dbMutex sync.Mutex
 
 type GormInventoryRepository struct {
 	repository.InventoryRepository
@@ -42,7 +45,9 @@ func (r *GormInventoryRepository) CheckInventory(pizzas []types.Pizza) error {
 	// Validate topping inventory
 	for topping, requiredQuantity := range toppingQuantities {
 		var dbTopping entities.Topping
+		dbMutex.Lock()
 		err := r.db.Where("name = ?", topping).First(&dbTopping).Error
+		dbMutex.Unlock()
 		if err != nil {
 			return fmt.Errorf("topping %s not found in inventory", topping)
 		}
@@ -57,9 +62,11 @@ func (r *GormInventoryRepository) CheckInventory(pizzas []types.Pizza) error {
 		crustType, crustSize := splitCrustKey(crustKey) // Split the composite key back into CrustType and Size
 
 		// Select the CrustSize entry
+		dbMutex.Lock()
 		err := r.db.Joins("JOIN crust_type ON crust_type.id = crust_size.crust_type_id").
 			Where("crust_type.type = ? AND crust_size.size = ?", crustType, crustSize).
 			First(&dbCrustSize).Error
+		dbMutex.Unlock()
 		if err != nil {
 			return fmt.Errorf("crust type %s with size %s not found in inventory", crustType, crustSize)
 		}
@@ -72,9 +79,11 @@ func (r *GormInventoryRepository) CheckInventory(pizzas []types.Pizza) error {
 
 	// Subtract topping quantities
 	for topping, quantity := range toppingQuantities {
+		dbMutex.Lock()
 		err := r.db.Model(&entities.Topping{}).
 			Where("name = ?", topping).
 			Update("quantity", gorm.Expr("quantity - ?", quantity)).Error
+		dbMutex.Unlock()
 		if err != nil {
 			return fmt.Errorf("failed to update quantity for topping %s: %v", topping, err)
 		}
@@ -86,9 +95,11 @@ func (r *GormInventoryRepository) CheckInventory(pizzas []types.Pizza) error {
 
 		// Select the CrustSize entry
 		var dbCrustSize entities.CrustSize
+		dbMutex.Lock()
 		err := r.db.Joins("JOIN crust_type ON crust_type.id = crust_size.crust_type_id").
 			Where("crust_type.type = ? AND crust_size.size = ?", crustType, crustSize).
 			First(&dbCrustSize).Error
+		dbMutex.Unlock()
 		if err != nil {
 			return fmt.Errorf("failed to find crust type %s with size %s: %v", crustType, crustSize, err)
 		}

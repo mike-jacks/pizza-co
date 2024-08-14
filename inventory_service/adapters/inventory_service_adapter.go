@@ -86,6 +86,11 @@ func (s *InventoryServer) CheckInventory(ctx context.Context, req *inventory_v1_
 
 	if err := s.repo.CheckInventory(pizzas); err != nil {
 		message = fmt.Sprintf("Error: %v", err)
+		return &inventory_v1_pb.InventoryCheckResponse{
+			Message:     message,
+			ErrorCode:   0,
+			IsAvailable: false,
+		}, err
 	}
 
 	// Build gRPC response

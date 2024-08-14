@@ -1,4 +1,4 @@
-package grpc;
+package grpc
 
 import (
 	"context"
@@ -36,21 +36,17 @@ func generateOrderNumber() string {
 func checkInventory(s *orderManagementServer, req *inventory_v1_pb.InventoryCheckRequest) (*inventory_v1_pb.InventoryCheckResponse, error) {
 	const maxRetries = 3
 	const retryDelay = 2 * time.Second
-	var resp *inventory_v1_pb.InventoryCheckResponse
-	var err error
-
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+	resp, err := s.inventoryClient.CheckInventory(ctx, req)
+	if err != nil {
+		log.Printf("Error checking inventory: %v", err)
+		os.Stdout.Sync()
+		time.Sleep(retryDelay)
+	}
 	for i := 0; i < maxRetries; i++ {
-		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 		defer cancel()
 
-		resp, err = s.inventoryClient.CheckInventory(ctx, req)
-		if err != nil {
-			log.Printf("Error checking inventory: %v", err)
-			os.Stdout.Sync()
-			time.Sleep(retryDelay)
-		} else {
-			break
-		}
 	}
 	if err != nil {
 		log.Printf("Failed to check inventory after %d attempts: %v", maxRetries, err)
@@ -101,9 +97,20 @@ func (s *orderManagementServer) PlaceOrder(req *order_management_v1_pb.OrderRequ
 
 			resp, err := checkInventory(s, req)
 			if err != nil {
+				message = err.Error()
 				log.Printf("Error checking inventory: %v", err)
 				os.Stdout.Sync()
-				return err
+				res := &order_management_v1_pb.OrderResponse{
+					OrderId: orderID,
+					Status:  stage,
+					Message: message,
+				}
+				if stream_err := stream.Send(res); stream_err != nil {
+					log.Println(err)
+					os.Stdout.Sync()
+					return stream_err
+				}
+				return nil
 			}
 			time.Sleep(2 * time.Second)
 			message = fmt.Sprintf("%v", resp.GetMessage())

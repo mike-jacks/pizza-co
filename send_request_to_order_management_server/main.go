@@ -69,7 +69,7 @@ func main() {
 	}
 
 	// Number of concurrent requests
-	numRequests := 1
+	numRequests := 2
 
 	// WaitGroup to wait for all goroutines to finish
 	var wg sync.WaitGroup
