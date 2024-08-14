@@ -16,13 +16,35 @@ import (
 )
 
 func InitDB() *gorm.DB {
+	POSTGRES_HOST := os.Getenv("POSTGRES_HOST")
+	if POSTGRES_HOST == "" {
+		log.Println("POSTGRES_HOST variable not read")
+	}
+	POSTGRES_USER := os.Getenv("POSTGRES_USER")
+	if POSTGRES_HOST == "" {
+		log.Println("POSTGRES_USER variable not read")
+	}
+	POSTGRES_PASSWORD := os.Getenv("POSTGRES_PASSWORD")
+	if POSTGRES_HOST == "" {
+		log.Println("POSTGRES_PASSWORD variable not read")
+	}
+	POSTGRES_DB_NAME := os.Getenv("POSTGRES_DB_NAME")
+	if POSTGRES_HOST == "" {
+		log.Println("POSTGRES_DB_NAME variable not read")
+	}
+	POSTGRES_DB_PORT := os.Getenv("POSTGRES_PORT")
+	if POSTGRES_HOST == "" {
+		log.Println("POSTGRES_PORT variable not read")
+	}
 
 	// Define the DSN (Data Source Name)
-	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s",
-		os.Getenv("POSTGRES_HOST"),
-		os.Getenv("POSTGRES_USER"),
-		os.Getenv("POSTGRES_PASSWORD"),
-		os.Getenv("POSTGRES_DB_NAME"))
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
+		POSTGRES_HOST,
+		POSTGRES_USER,
+		POSTGRES_PASSWORD,
+		POSTGRES_DB_NAME,
+		POSTGRES_DB_PORT,
+	)
 
 	fmt.Println("DSN:", dsn) // Print the DSN for debugging
 

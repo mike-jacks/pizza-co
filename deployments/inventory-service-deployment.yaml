@@ -29,7 +29,7 @@ spec:
                 configMapKeyRef:
                   name: pizza-co-config
                   key: POSTGRES_PASSWORD
-            - name: POSTGRES_DB
+            - name: POSTGRES_DB_NAME
               valueFrom:
                 configMapKeyRef:
                   name: pizza-co-config
