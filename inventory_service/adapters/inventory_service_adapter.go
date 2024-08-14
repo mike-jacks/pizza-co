@@ -85,7 +85,7 @@ func (s *InventoryServer) CheckInventory(ctx context.Context, req *inventory_v1_
 	message = message[:len(message)-1] + ". All items in your order are in inventory and available to order!\n"
 
 	if err := s.repo.CheckInventory(pizzas); err != nil {
-		message = fmt.Sprintf("Error: %v", err)
+		message = fmt.Sprintf("Error: %v", err.Error())
 		return &inventory_v1_pb.InventoryCheckResponse{
 			Message:     message,
 			ErrorCode:   0,
