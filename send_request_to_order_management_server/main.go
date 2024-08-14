@@ -69,7 +69,7 @@ func main() {
 	}
 
 	// Number of concurrent requests
-	numRequests := 1000
+	numRequests := 50
 
 	// WaitGroup to wait for all goroutines to finish
 	var wg sync.WaitGroup
@@ -79,7 +79,7 @@ func main() {
 		orderManagementServerHost := os.Getenv("ORDER_MANAGEMENT_SERVICE_HOST")
 		var port int
 		if i%2 == 0 {
-			port = 65365
+			port = 9000
 		} else {
 			port = 9000
 		}
@@ -91,7 +91,7 @@ func main() {
 		}
 		log.Printf("Making request %d to %s:%d", i, orderManagementServerHost, port)
 
-		time.Sleep(10 * time.Millisecond)
+		time.Sleep(100 * time.Millisecond)
 		go func(i int) {
 			defer wg.Done() // Mark this goroutine as done when it finishes
 			defer func() {

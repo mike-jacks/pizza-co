@@ -6,3 +6,8 @@ data:
   INVENTORY_SERVICE_HOST: "inventory-service"
   ORDER_MANAGEMENT_SERVICE_HOSE: "order-management-service"
   USE_ENV_FILE: "false"
+  POSTGRES_HOST: "postgres"
+  POSTGRES_PORT: "5432"
+  POSTGRES_USER: "postgres"
+  POSTGRES_PASSWORD: "postgres"
+  POSTGRES_DB_NAME: "pizza"

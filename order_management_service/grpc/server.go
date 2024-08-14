@@ -22,7 +22,7 @@ type Server struct {
 
 func GetENV() error {
 	if os.Getenv("USE_ENV_FILE") != "false" {
-		if err := godotenv.Load("../../.env"); err != nil {
+		if err := godotenv.Load("../.env"); err != nil {
 			return fmt.Errorf("no .env file found or error loading it: %v", err)
 		} else {
 			log.Println(".env file loaded successfully")

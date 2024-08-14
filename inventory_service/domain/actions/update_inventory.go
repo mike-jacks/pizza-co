@@ -9,7 +9,7 @@ import (
 func UpdateInventory(items []entities.InventoryItem) {
 	// Implement inventory update logic here
 	for _, item := range items {
-		log.Printf("Updating inventory for item %s: %d units", item.ID, item.Quantity)
+		log.Printf("Updating inventory for item ide: %d - %d units", item.ID, item.Quantity)
 		// Update logic here, possibly interacting with a database
 	}
 }
