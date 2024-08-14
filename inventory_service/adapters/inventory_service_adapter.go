@@ -8,7 +8,9 @@ import (
 	"time"
 
 	common_v1_pb "github.com/mike_jacks/pizza_co/common/ports/grpc/v1"
+
 	"github.com/mike_jacks/pizza_co/inventory_service/adapters/persistence"
+
 	"github.com/mike_jacks/pizza_co/inventory_service/domain/actions"
 	"github.com/mike_jacks/pizza_co/inventory_service/domain/types"
 	inventory_v1_pb "github.com/mike_jacks/pizza_co/inventory_service/ports/grpc/v1"
@@ -16,11 +18,13 @@ import (
 
 type InventoryServer struct {
 	inventory_v1_pb.UnimplementedInventoryServiceServer
+
 	repo *persistence.GormInventoryRepository
 }
 
 func NewInventoryServer(repo *persistence.GormInventoryRepository) *InventoryServer {
 	return &InventoryServer{repo: repo}
+
 }
 
 func convertToppings(toppings []common_v1_pb.Topping) []types.Topping {
@@ -84,6 +88,7 @@ func (s *InventoryServer) CheckInventory(ctx context.Context, req *inventory_v1_
 	}
 	message = message[:len(message)-1] + ". All items in your order are in inventory and available to order!\n"
 
+
 	if err := s.repo.CheckInventory(pizzas); err != nil {
 		message = fmt.Sprintf("Error: %v", err.Error())
 		return &inventory_v1_pb.InventoryCheckResponse{
@@ -92,6 +97,7 @@ func (s *InventoryServer) CheckInventory(ctx context.Context, req *inventory_v1_
 			IsAvailable: false,
 		}, err
 	}
+
 
 	// Build gRPC response
 	return &inventory_v1_pb.InventoryCheckResponse{

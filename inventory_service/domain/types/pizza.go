@@ -1,15 +1,18 @@
 package types
 
 type Pizza struct {
+
 	Toppings  []Topping
 	CrustType CrustType
 	Size      Size
 	Quantity  int
+
 }
 
 type Topping string
 
 const (
+
 	TOPPING_UNSPECIFIED Topping = "TOPPING_UNSPECIFIED"
 	PEPPERONI           Topping = "PEPPERONI"
 	MUSHROOMS           Topping = "MUSHROOMS"
@@ -20,6 +23,7 @@ const (
 	GREEN_PEPPERS       Topping = "GREEN_PEPPERS"
 	PINEAPPLE           Topping = "PINEAPPLE"
 	ANCHOVIES           Topping = "ANCHOVIES"
+
 )
 
 type CrustType string
@@ -43,3 +47,4 @@ const (
 	LARGE            Size = "LARGE"
 	EXTRA_LARGE      Size = "EXTRA_LARGE"
 )
+

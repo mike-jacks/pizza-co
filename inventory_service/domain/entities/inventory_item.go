@@ -1,5 +1,6 @@
 package entities
 
+
 type Topping struct {
 	ID       uint            `gorm:"primaryKey"`
 	Name     string          `gorm:"type:varchar(100);unique;not null"`
@@ -36,4 +37,5 @@ type InventoryItem struct {
 type InventoryItemTopping struct {
 	InventoryItemID uint `gorm:"primaryKey"`
 	ToppingID       uint `gorm:"primaryKey"`
+
 }
