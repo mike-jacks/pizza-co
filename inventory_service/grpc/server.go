@@ -8,7 +8,6 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/mike_jacks/pizza_co/config"
-	"github.com/mike_jacks/pizza_co/inventory_service/adapters"
 	inventory_v1_pb "github.com/mike_jacks/pizza_co/inventory_service/ports/grpc/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
