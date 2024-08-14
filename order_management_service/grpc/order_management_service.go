@@ -10,6 +10,7 @@ import (
 
 	inventory_v1_pb "github.com/mike_jacks/pizza_co/inventory_service/ports/grpc/v1"
 	order_management_v1_pb "github.com/mike_jacks/pizza_co/order_management_service/ports/grpc/v1"
+	"google.golang.org/grpc/status"
 )
 
 type orderManagementServer struct {
@@ -34,25 +35,14 @@ func generateOrderNumber() string {
 }
 
 func checkInventory(s *orderManagementServer, req *inventory_v1_pb.InventoryCheckRequest) (*inventory_v1_pb.InventoryCheckResponse, error) {
-	const maxRetries = 3
-	const retryDelay = 2 * time.Second
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 	resp, err := s.inventoryClient.CheckInventory(ctx, req)
 	if err != nil {
-		log.Printf("Error checking inventory: %v", err)
-		os.Stdout.Sync()
-		time.Sleep(retryDelay)
+		st, _ := status.FromError(err)
+		return resp, fmt.Errorf(st.Message())
 	}
-	for i := 0; i < maxRetries; i++ {
-		defer cancel()
-
-	}
-	if err != nil {
-		log.Printf("Failed to check inventory after %d attempts: %v", maxRetries, err)
-		os.Stdout.Sync()
-	}
-	return resp, err
+	return resp, nil
 }
 
 func (s *orderManagementServer) PlaceOrder(req *order_management_v1_pb.OrderRequest, stream order_management_v1_pb.OrderManagementService_PlaceOrderServer) error {
