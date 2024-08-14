@@ -3,7 +3,9 @@
 package config
 
 import (
+	"fmt"
 	"log"
+	"os"
 
 	"github.com/mike_jacks/pizza_co/inventory_service/domain/entities"
 	"github.com/mike_jacks/pizza_co/inventory_service/domain/types"
@@ -13,8 +15,16 @@ import (
 )
 
 func InitDB() *gorm.DB {
+
 	// Define the DSN (Data Source Name)
-	dsn := "host=localhost user=postgres password=postgres dbname=pizza port=5435 sslmode=disable"
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
+		os.Getenv("POSTGRES_HOST"),
+		os.Getenv("POSTGRES_USER"),
+		os.Getenv("POSTGRES_PASSWORD"),
+		os.Getenv("POSTGRES_DB"),
+		os.Getenv("POSTGRES_PORT"))
+
+	fmt.Println("DSN:", dsn) // Print the DSN for debugging
 
 	// Open a connection to the database
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
@@ -39,6 +49,7 @@ func InitDB() *gorm.DB {
 	}
 
 	initializeData(db)
+	log.Println("Database has been reset with default data")
 
 	return db
 }

@@ -18,6 +18,37 @@ spec:
         - name: inventory-service
           image: mikejacks/pizza-co-servers-inventory-service:latest
           imagePullPolicy: Always
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: pizza-co-config
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: pizza-co-config
+                  key: POSTGRES_PASSWORD
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: pizza-co-config
+                  key: POSTGRES_DB_NAME
+            - name: POSTGRES_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: pizza-co-config
+                  key: POSTGRES_HOST
+            - name: POSTGRES_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: pizza-co-config
+                  key: POSTGRES_PORT
+            - name: USE_ENV_FILE
+              valueFrom:
+                configMapKeyRef:
+                  name: pizza-co-config
+                  key: USE_ENV_FILE
           ports:
             - containerPort: 9100
           resources:

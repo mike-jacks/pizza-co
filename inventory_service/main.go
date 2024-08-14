@@ -11,6 +11,10 @@ import (
 )
 
 func main() {
+	if err := grpc.GetENV(); err != nil {
+		log.Println(err)
+		os.Stdout.Sync()
+	}
 
 	db := config.InitDB()
 
